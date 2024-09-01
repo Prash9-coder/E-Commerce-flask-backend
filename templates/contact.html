@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block title %}
+Conatact
+{% endblock title %} {% block main %}
+<div class="contact">
+    <div class="contactBanner">
+        <h1>#Let's Connect</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, iure eos!</p>
+
+    </div>
+    <div class="connect">
+        <div class="connectText">
+            <h1>Visit Our Office or Contact <br> Us Today</h1>
+            <p>Address : Dablin Park, England, New york</p>
+            <p>Contact : dumiemail@gmail.com</p>
+            <p>Number : 999999000011</p>
+        </div>
+        <img src="{{ url_for('static', filename='images/map.PNG') }}" alt="">
+    </div>
+
+    <div class="form">
+        <h1>Connect with Us. Fill Form</h1>
+        <input type="text" placeholder="Enter Your FirstName"> <br>
+        <input type="text" placeholder="Enter Your LsstName"> <br>
+        <input type="text" placeholder="Enter Your Email"><br>
+        <input type="text" placeholder="Enter Your Number"><br>
+        <input type="text" placeholder="Enter Your Address"><br>
+        <button>Submit</button>
+
+    </div>
+</div>
+
+<div class="letter">
+    <div class="sign">
+        <h2>Sign Up for NewsLetter</h2>
+        <p>Lorem ipsum dolor sit, amet consectetur Special Offer</p>
+    </div>
+    <div class="inp">
+        <input type="text" placeholder="Enter Email Address">
+        <button>Sign Up</button>
+    </div>
+</div>
+{% endblock main %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+Payment
+{% endblock title %}
+
+{% block main %}
+<div class="container mt-5 payment-container">
+    <h2 class="text-center mb-4">Payment Details</h2>
+
+    <div class="row">
+        <!-- Billing Details -->
+        <div class="col-md-6 billing-info">
+            <form action="{{ url_for('checkout') }}" method="POST">
+                <h4>Billing Information</h4>
+                <div class="mb-3">
+                    <label for="fullname" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullname" name="fullname" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="state" name="state" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="zip" class="form-label">Zip Code</label>
+                        <input type="text" class="form-control" id="zip" name="zip" required>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="col-md-6 payment-info">
+            <h4>Payment Information</h4>
+
+            <div class="mb-3">
+                <label for="cardname" class="form-label">Name on Card</label>
+                <input type="text" class="form-control" id="cardname" name="cardname" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="cardnumber" class="form-label">Credit Card Number</label>
+                <input type="text" class="form-control" id="cardnumber" name="cardnumber" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="expdate" class="form-label">Expiration Date</label>
+                    <input type="text" class="form-control" id="expdate" name="expdate" placeholder="MM/YY" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="cvv" class="form-label">CVV</label>
+                    <input type="text" class="form-control" id="cvv" name="cvv" required>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4>Order Summary</h4>
+            <table class="table table-striped order-summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Product Name</td>
+                        <td>1</td>
+                        <td>$11.00</td>
+                    </tr>
+                    <!-- Repeat for each product in the cart -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Total</th>
+                        <th>$11.00</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <button type="submit" class="btn btn-primary btn-block complete-purchase-btn">Complete Purchase</button>
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock main %}

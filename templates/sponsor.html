@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+Sponsor a Smile
+{% endblock title %}
+
+{% block main %}
+<div class="sponsor-container">
+    <h1 class="text-center">Sponsor a Smile</h1>
+    <p class="text-center sponsor-paragraph">
+        Every small act of kindness can create a ripple of hope and joy. By sponsoring essential items such as clothing, education kits, or meals, you can bring a smile to the faces of those who need it the most—be it a struggling child, a physically challenged individual, or someone striving to find their place in the world. Let's come together to transform lives, spread warmth, and make a meaningful difference in our community.
+    </p>
+
+    <!-- Images Section -->
+    <div class="sponsor-images">
+        <img src="{{ url_for('static', filename='images/helping beggers.jpg') }}" alt="Helping Beggars" class="sponsor-image">
+        <img src="{{ url_for('static', filename='images/handicaped.jpg') }}" alt="Supporting the Physically Handicapped" class="sponsor-image">
+    </div>
+
+    <!-- Form Section -->
+    <form action="{{ url_for('sponsor') }}" method="POST" class="sponsor-form">       
+        <div class="form-group">
+            <label for="sponsor_name">Your Name:</label>
+            <input type="text" name="sponsor_name" id="sponsor_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="item">Item to Sponsor:</label>
+            <select name="item" id="item" class="form-control">
+                <option value="Clothing">Clothing</option>
+                <option value="Education Kit">Education Kit</option>
+                <option value="Meal">Meal</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="recipient">Recipient:</label>
+            <input type="text" name="recipient" id="recipient" class="form-control" placeholder="E.g., Orphanage Name, Child's Name, etc." required>
+        </div>
+        <div class="form-group">
+            <label for="message">Message (Optional):</label>
+            <textarea name="message" id="message" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Sponsor Now</button>
+    </form>
+</div>
+{% endblock main %}

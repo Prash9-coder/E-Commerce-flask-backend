@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+      Orders
+{% endblock title %}
+
+{% block main %}
+<div class="orders-container">
+    <h1 class="text-center">Your Orders</h1>
+
+    {% if orders %}
+    <ul class="orders-list">
+        {% for order in orders %}
+        <li class="order-item d-flex align-items-center">
+            <div class="order-details">
+                <h3>Order #{{ order.id }}</h3>
+                <p>Status: {{ order.status }}</p>
+                <p>Total: ${{ order.total_price }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty-orders-msg text-center">You haven't ordered anything yet.</p>
+    <div class="text-center">
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Order Now</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock main %}
