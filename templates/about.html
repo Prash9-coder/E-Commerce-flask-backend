@@ -5,39 +5,38 @@
 {% endblock title %}
 
 {% block main %}
-    
-   <div class="container about">
-        <div class="text-center py-4 aboutus">
-            <h1>{{ about_data.title }}</h1>
+<div class="container about">
+    <div class="text-center py-4 aboutus">
+        <h1>{{ about_data.title }}</h1>
+        <p>{{ about_data.description }}</p>
+    </div>
+    <div class="container">
+        <h1>{{ about_data.title }}</h1>
+        <p>{{ about_data.description }}</p>
+        <h2>Our Partners</h2>
+        <ul>
+            {% for company in about_data.partner_companies %}
+            <li>{{ company }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Our Initiatives</h2>
+        <ul>
+            {% for initiative in about_data.sponsor_initiatives %}
+            <li>{{ initiative }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="row me align-items-center">
+        <div class="col-md-6 text-center">
+            <img src="{{ url_for('static', filename=about_data.image_path) }}" class="img-fluid" alt="About Us Image">
+        </div>
+        <div class="col-md-6 aboutText">
+            <h1>Who we are?</h1>
             <p>{{ about_data.description }}</p>
         </div>
-        <div class="container">
-    <h1>{{ about_data.title }}</h1>
-    <p>{{ about_data.description }}</p>
-    <h2>Our Partners</h2>
-    <ul>
-        {% for company in about_data.partner_companies %}
-        <li>{{ company }}</li>
-        {% endfor %}
-    </ul>
-    <h2>Our Initiatives</h2>
-    <ul>
-        {% for initiative in about_data.sponsor_initiatives %}
-        <li>{{ initiative }}</li>
-        {% endfor %}
-    </ul>
+    </div>
 </div>
 
-        <div class="row me align-items-center">
-            <div class="col-md-6 text-center">
-                <img src="{{ url_for('static', filename=about_data.image_path) }}" class="img-fluid" alt="About Us Image">
-            </div>
-            <div class="col-md-6 aboutText">
-                <h1>Who we are?</h1>
-                <p>{{ about_data.description }}</p>
-            </div>
-        </div>
-    </div>
-    <div style="margin-bottom: 60px;"></div>
 {% endblock main %}
 

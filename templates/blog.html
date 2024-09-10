@@ -1,49 +1,66 @@
-{% extends "base.html" %}
-
-{% block title %}
-Blog
-{% endblock title %}
-
-{% block main %}
+{% extends "base.html" %} {% block title %} Blog {% endblock title %} {% block
+main %}
 <!-- Blogs Section -->
 <div class="trends">
-    <div class="head">
-        <h1>Trends <span>Men's Wear</span></h1>
+  <div class="head">
+    <h1>Trends <span>Men's Wear</span></h1>
+  </div>
+  <div class="card">
+    <!-- Blog Post 1 -->
+    <div class="blog">
+      <img
+        src="{{ url_for('static', filename='images/tr1.webp') }}"
+        alt="Trending Girl Clothes"
+      />
+      <div class="overlay">
+        <p>Trending Now</p>
+      </div>
+      <div class="blogText">
+        <h2>Trending Girl Clothes</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, animi
+          expedita?
+        </p>
+        <a
+          href="https://influencermarketinghub.com/best-fashion-blogs/"
+          target="_blank"
+          >Read More</a
+        >
+      </div>
     </div>
-    <div class="card">
-        <!-- Blog Post 1 -->
-        <div class="blog">
-            <img src="{{ url_for('static', filename='images/tr1.webp') }}" alt="Trending Girl Clothes">
-            <div class="blogText">
-                <h2>Trending Girl Clothes</h2>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, animi expedita?</p>
-                <a href="https://influencermarketinghub.com/best-fashion-blogs/" target="_blank">Read More</a>
-            </div>
-        </div>
 
-        <!-- Blog Post 2 -->
-        <div class="blog">
-            <img src="{{ url_for('static', filename='images/tr3.webp') }}" alt="Trending Boys Clothes">
-            <div class="blogText">
-                <h2>Trending Boys Clothes</h2>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, animi expedita?</p>
-                <a href="https://www.apetogentleman.com/" target="_blank">Read More</a>
-            </div>
-        </div>
+    <!-- Blog Post 2 -->
+    <div class="blog">
+      <img
+        src="{{ url_for('static', filename='images/tr3.webp') }}"
+        alt="Trending Boys Clothes"
+      />
+      <div class="overlay">
+        <p>Trending Now</p>
+      </div>
+      <div class="blogText">
+        <h2>Trending Boys Clothes</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, animi
+          expedita?
+        </p>
+        <a href="https://www.apetogentleman.com/" target="_blank">Read More</a>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Newsletter Signup -->
 <div class="letter">
-    <div class="letterText">
-        <h1>Sign Up for Newsletter</h1>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-    </div>
-    <div class="inp">
-        <form action="{{ url_for('subscribe_newsletter') }}" method="POST">
-            <input type="email" name="email" placeholder="Enter Email" required>
-            <button type="submit">Sign Up</button>
-        </form>        
-    </div>
+  <div class="letterText">
+    <h1>Sign Up for Newsletter</h1>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+  </div>
+  <div class="inp">
+    <form action="{{ url_for('subscribe_newsletter') }}" method="POST">
+      <input type="email" name="email" placeholder="Enter Email" required />
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
 </div>
 {% endblock main %}

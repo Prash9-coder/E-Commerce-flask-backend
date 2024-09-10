@@ -1,7 +1,10 @@
-{% extends 'base.html' %} {% block title %}
-Payment Confirmation
-{% endblock title %} {% block main %}
+{% extends 'base.html' %}
 
+{% block title %}
+Payment Confirmation
+{% endblock title %}
+
+{% block main %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -13,7 +16,6 @@ Payment Confirmation
                     <p class="lead">Hi {{ fullname }},</p>
                     <p>Your order has been successfully processed. Below are your order details:</p>
                     <ul>
-                        <!-- Add order details here, e.g., order number, items, etc. -->
                         <li>Order Number: <strong>12345</strong></li>
                         <li>Total Amount: <strong>$99.99</strong></li>
                         <li>Estimated Delivery: <strong>5-7 business days</strong></li>

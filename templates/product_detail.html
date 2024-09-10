@@ -5,7 +5,7 @@ Product_Details
 {% endblock title %}
 
 {% block main %}
-<div class="container">
+<div class="details_container">
     <!-- Product Link and Image -->
     <a href="{{ url_for('product_detail', product_id=product['id']) }}">
         <img src="{{ url_for('static', filename='images/' + product['image']) }}" alt="{{ product['name'] }}">

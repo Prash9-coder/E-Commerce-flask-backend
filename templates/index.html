@@ -1,116 +1,78 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block title %}
-Home
+      Home
 {% endblock title %}
 
 {% block main %}
-<!-- Main page -->
+<!-- Main Section -->
 <div class="main">
-  <div class="mainText">
-    <h2>Easy Shop</h2>
-    <h1 class="top">Super Value Deals</h1>
-    <h1>On All Products</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi.</p>
-    <a href="{{ url_for('shops') }}" id="explore-btn" class="btn btn-warning">Explore</a>
-  </div>
-  <img src="{{ url_for('static', filename='images/m3.png') }}" alt="Easy Shop" />
+    <div class="mainText">
+        <h2>Easy Shop</h2>
+        <h1 class="top">Super Value Deals</h1>
+        <h1>On All Products</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi</p>
+        <button id="explore-btn" class="btn btn-warning">Explore</button>
+    </div>
+    <img src="{{ url_for('static', filename='images/m3.png') }}" alt="">
 </div>
 
-<!-- Details Container -->
-<div class="details-container"></div>
-
-<!-- Men's Wear Cards -->
-<div class="trend">
-  <div class="head">
-    <h1>Easy Shop <span>Men's Wear</span></h1>
-  </div>
-  <div class="card">
-    {% for product in men_products %}
+<!-- Men's Wear Section -->
+<h1>Easy Shop <span>Men's Wear</span></h1>
+<div class="grid-container">
+    {% for product in mens_products %}
     <div class="crd">
-      <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" />
-      <div class="crdText">
-        <h2>{{ product.name }}</h2>
-        <div class="ratings">
-          {% for _ in range(product.rating) %}
-            <i class="fa-solid fa-star"></i>
-          {% endfor %}
-          {% if product.rating < 5 %}
-            <i class="fa-solid fa-star-half-stroke"></i>
-          {% endif %}
+        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+        <div class="crdText">
+            <h2>{{ product.name }}</h2>
+            <div class="ratings">
+                {% for _ in range(product.rating) %}
+                <i class="fa-solid fa-star"></i>
+                {% endfor %}
+                {% if product.rating < 5 %}
+                <i class="fa-solid fa-star-half-stroke"></i>
+                {% endif %}
+            </div>
+            <form action="{{ url_for('add_to_cart') }}" method="POST">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="product_name" value="{{ product.name }}">
+                <input type="hidden" name="product_price" value="{{ product.price }}">
+                <input type="hidden" name="product_image" value="{{ url_for('static', filename=product.image) }}">
+                <button type="submit" class="btn btn-success">Add to Cart</button>
+                <button type="submit" formaction="{{ url_for('checkout') }}" name="quantity" value="1" class="btn btn-warning">Buy Now</button>
+            </form>
         </div>
-
-        <!-- Form for Add to Cart -->
-        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
-          <input type="hidden" name="product_id" value="{{ product.id }}" />
-          <input type="hidden" name="product_name" value="{{ product.name }}" />
-          <input type="hidden" name="product_price" value="{{ product.price }}" />
-          <input type="hidden" name="product_image" value="{{ url_for('static', filename=product.image) }}" />
-          <button class="btn-success" data-product-id="123">Add to Cart</button>
-        </form>
-
-        <!-- Form for Buy Now -->
-        <form action="{{ url_for('checkout') }}" method="POST">
-          <input type="hidden" name="product_id" value="{{ product.id }}" />
-          <input type="hidden" name="quantity" value="1" />
-          <input type="hidden" name="total_price" value="{{ product.price }}" />
-          <button type="submit" class="btn btn-warning">Buy Now</button>
-        </form>
-      </div>
     </div>
     {% endfor %}
-  </div>
 </div>
 
-<!-- Women's Wear Cards -->
-<div class="trend" id="trendSec">
-  <div class="head">
-    <h1>Trends <span>Women's Wear</span></h1>
-  </div>
-  <div class="card">
-    {% for product in women_products %}
+<!-- Women's Wear Section -->
+<h1>Trends <span>Women's Wear</span></h1>
+<div class="grid-container">
+    {% for product in womens_products %}
     <div class="crd">
-      <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" />
-      <div class="crdText">
-        <h2>{{ product.name }}</h2>
-        <div class="ratings">
-          {% for _ in range(product.rating) %}
-            <i class="fa-solid fa-star"></i>
-          {% endfor %}
-          {% if product.rating < 5 %}
-            <i class="fa-solid fa-star-half-stroke"></i>
-          {% endif %}
+        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+        <div class="crdText">
+            <h2>{{ product.name }}</h2>
+            <div class="ratings">
+                {% for _ in range(product.rating) %}
+                <i class="fa-solid fa-star"></i>
+                {% endfor %}
+                {% if product.rating < 5 %}
+                <i class="fa-solid fa-star-half-stroke"></i>
+                {% endif %}
+            </div>
+            <form action="{{ url_for('add_to_cart') }}" method="POST">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="product_name" value="{{ product.name }}">
+                <input type="hidden" name="product_price" value="{{ product.price }}">
+                <input type="hidden" name="product_image" value="{{ url_for('static', filename=product.image) }}">
+                <button type="submit" class="btn btn-success">Add to Cart</button>
+                <button type="submit" class="btn btn-warning">Buy Now</button>
+            </form>
         </div>
-
-        <!-- Form for Add to Cart -->
-        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
-          <input type="hidden" name="product_id" value="{{ product.id }}" />
-          <input type="hidden" name="product_name" value="{{ product.name }}" />
-          <input type="hidden" name="product_price" value="{{ product.price }}" />
-          <input type="hidden" name="product_image" value="{{ url_for('static', filename=product.image) }}" />
-          <button type="submit" class="btn btn-success">Add to Cart</button>
-        </form>
-
-        <!-- Form for Buy Now -->
-        <form action="{{ url_for('checkout') }}" method="POST">
-          <input type="hidden" name="product_id" value="{{ product.id }}" />
-          <input type="hidden" name="quantity" value="1" />
-          <input type="hidden" name="total_price" value="{{ product.price }}" />
-          <button type="submit" class="btn btn-warning">Buy Now</button>
-        </form>
-      </div>
     </div>
     {% endfor %}
-  </div>
 </div>
 
-<!-- Sale Banner -->
-<div class="trend2">
-  <div class="txt">
-    <h2>Easy Shop</h2>
-    <h1>Discount <span>SALE 50%</span></h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit.</p>
-    <a href="{{ url_for('shops') }}" id="explore-btn" class="btn btn-warning">Explore</a>
-  </div>
-  <img src="{{ url_for('static', filename='images/m2.png') }}" alt="Sale" />
-</div>
-{% endblock main %}
+{% endblock %}

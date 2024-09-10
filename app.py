@@ -4,39 +4,68 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_migrate import Migrate
+from sqlalchemy.orm import joinedload
 import os
-from datetime import datetime, timezone
+from datetime import datetime
 
-# Flask app setup
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with your actual secret key
+app.secret_key = 'your_secret_key'
 
-# SQLAlchemy and Flask-Migrate configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///register.database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+
+
 database = SQLAlchemy(app)
 migrate = Migrate(app, database)
 
-# Flask-Login configuration
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Models
 class User(database.Model, UserMixin):
     id = database.Column(database.Integer, primary_key=True)
     username = database.Column(database.String(50), unique=True, nullable=False)
     email = database.Column(database.String(50), unique=True, nullable=False)
-    password = database.Column(database.String(255), nullable=False)  # Use a hash for passwords
-    profile_photo = database.Column(database.String(100), nullable=True)
+    password = database.Column(database.String(255), nullable=False) 
+    profile_photo = database.Column(database.String(100), nullable=True, default='profile.png')
     date_of_birth = database.Column(database.String(10), nullable=True)
     additional_details = database.Column(database.String(255), nullable=True)
+    reviews = database.relationship('Review', back_populates='user')
+    orders = database.relationship('Order', backref='user', lazy=True)
+
+class Product(database.Model):
+    id = database.Column(database.Integer, primary_key=True)
+    name = database.Column(database.String(100), nullable=False)
+    price = database.Column(database.Float, nullable=False)
+    image = database.Column(database.String(100), nullable=False)
+    rating = database.Column(database.Integer, default=0)
+    category = database.Column(database.String(50), nullable=False) 
+    reviews = database.relationship('Review', back_populates='product')
+    cart_items = database.relationship('Cart_item', back_populates='product')
+
+class Review(database.Model):
+    id = database.Column(database.Integer, primary_key=True)
+    product_id = database.Column(database.Integer, database.ForeignKey('product.id'), nullable=False)
+    user_id = database.Column(database.Integer, database.ForeignKey('user.id'), nullable=False)
+    comment = database.Column(database.Text, nullable=False)
+    rating = database.Column(database.Integer, nullable=False)
+    created_at = database.Column(database.DateTime, default=datetime.utcnow)
+    product = database.relationship('Product', back_populates='reviews')
+    user = database.relationship('User', back_populates='reviews')
+
+class Cart_item(database.Model):
+    id = database.Column(database.Integer, primary_key=True)
+    product_id = database.Column(database.Integer, database.ForeignKey('product.id'), nullable=False)
+    image = database.Column(database.String(100), nullable=False)
+    quantity = database.Column(database.Integer, nullable=False, default=1)
+    product = database.relationship('Product', back_populates='cart_items')
 
 class Order(database.Model):
-    __tablename__ = 'orders'
     id = database.Column(database.Integer, primary_key=True)
     user_id = database.Column(database.Integer, database.ForeignKey('user.id'), nullable=False)
     product_id = database.Column(database.Integer, nullable=False)
@@ -48,44 +77,18 @@ class Order(database.Model):
     payment_status = database.Column(database.String(50), nullable=False, default='Unpaid')
 
 class About(database.Model):
-    __tablename__ = 'aboutus'
     id = database.Column(database.Integer, primary_key=True)
     title = database.Column(database.String(100), nullable=False)
     description = database.Column(database.Text, nullable=False)
     image_path = database.Column(database.String(200), nullable=True)
 
-class Product(database.Model):
-    __tablename__ = 'products'
-    id = database.Column(database.Integer, primary_key=True)
-    name = database.Column(database.String(100), nullable=False)
-    price = database.Column(database.Float, nullable=False)
-    image = database.Column(database.String(200), nullable=True)
-
 class Sponsorship(database.Model):
-    __tablename__ = 'sponsorships'
     id = database.Column(database.Integer, primary_key=True)
     sponsor_name = database.Column(database.String(100), nullable=False)
     product = database.Column(database.String(50), nullable=False)
     recipient = database.Column(database.String(100), nullable=False)
     message = database.Column(database.Text, nullable=True)
     date_submitted = database.Column(database.DateTime, default=datetime.utcnow)
-
-class Review(database.Model):
-    __tablename__ = 'reviews'
-    id = database.Column(database.Integer, primary_key=True)
-    product_id = database.Column(database.Integer, database.ForeignKey('products.id'), nullable=False)
-    user_id = database.Column(database.Integer, database.ForeignKey('user.id'), nullable=False)
-    comment = database.Column(database.Text, nullable=False)
-    rating = database.Column(database.Integer, nullable=False)
-    created_at = database.Column(database.DateTime, default=datetime.utcnow)
-    
-    product = database.relationship('Product', back_populates='reviews')
-    user = database.relationship('User', back_populates='reviews')
-
-# Add reverse relationships to User and Product models
-User.reviews = database.relationship('Review', back_populates='user')
-Product.reviews = database.relationship('Review', back_populates='product')
-
 
 def populate_about_table():
     if not About.query.first():
@@ -108,6 +111,30 @@ with app.app_context():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# List of sample products
+products = [
+    {'id':1, 'name': 'Cotton Trending Shirt', 'price': 11.00, 'image': 'images/srt1.webp', 'rating': 4, 'category': 'Men'},
+    {'id':2, 'name': 'Cotton Trending Shirt 2', 'price': 15.00, 'image': 'images/srt2.webp', 'rating': 4, 'category': 'Men'},
+    {'id':3, 'name': 'Cotton Trending Shirt 9', 'price': 16.00, 'image': 'images/srt6.webp', 'rating': 4, 'category': 'Men'},
+    {'id':4, 'name': 'Trending Girl Top6', 'price': 19.00, 'image': 'images/wn4.webp', 'rating': 4, 'category': 'Women'},
+    {'id':5, 'name': 'Trending Girl Top 7', 'price': 20.00, 'image': 'images/wn5.webp', 'rating': 4, 'category': 'Women'},
+    {'id':6, 'name': 'Trending Girl Top 8', 'price': 22.00, 'image': 'images/wn6.webp', 'rating': 4, 'category': 'Women'},
+]
+
+def seed_data():
+
+ for product_data in products:
+        existing_product = Product.query.filter_by(id=product_data['id']).first()
+        if not existing_product:
+            product = Product(**product_data)
+            database.session.add(product)
+        database.session.commit()
+
+with app.app_context():
+    database.create_all()
+    populate_about_table()
+    seed_data()
+
 @app.before_request
 def before_request():
     if 'cart' not in session:
@@ -116,38 +143,31 @@ def before_request():
 # Routes
 @app.route('/')
 def index():
-    if current_user.is_authenticated:
-        men_products = [
-            {'id': 1, 'name': 'Cotton Trending Shirt', 'price': '11.00', 'image': 'images/srt1.webp', 'rating': 4},
-            {'id': 2, 'name': 'Cotton Trending Shirt 2', 'price': '15.00', 'image': 'images/srt2.webp', 'rating': 4},
-            {'id': 3, 'name': 'Cotton Trending Shirt 3', 'price': '16.00', 'image': 'images/srt6.webp', 'rating': 4},
-            # Add more men products as needed
-        ]
-        women_products = [
-            {'id': 5, 'name': 'Trending Girl Top', 'price': '19.00', 'image': 'images/wn4.webp', 'rating': 4},
-            {'id': 6, 'name': 'Trending Girl Top 2', 'price': '20.00', 'image': 'images/wn5.webp', 'rating': 4},
-            {'id': 7, 'name': 'Trending Girl Top 3', 'price': '22.00', 'image': 'images/wn6.webp', 'rating': 4},
-            # Add more women products as needed
-        ]
-        return render_template('index.html', men_products=men_products, women_products=women_products)
-    return redirect(url_for('login'))
-
+    mens_products = [
+        {'id': 1, 'name': 'Cotton Trending Shirt ', 'price': '11.00', 'image': 'images/srt1.webp', 'rating': 4},
+        {'id': 2, 'name': 'Cotton Trending Shirt 2', 'price': '15.00', 'image': 'images/srt2.webp', 'rating': 4},
+        {'id': 3, 'name': 'Cotton Trending Shirt 3', 'price': '16.00', 'image': 'images/srt6.webp', 'rating': 4},
+    ]
+    womens_products = [
+        {'id': 4, 'name': 'Trending Girl Top', 'price': '19.00', 'image': 'images/wn4.webp', 'rating': 4},
+        {'id': 5, 'name': 'Trending Girl Top 2', 'price': '20.00', 'image': 'images/wn5.webp', 'rating': 4},
+        {'id': 6, 'name': 'Trending Girl Top 3', 'price': '22.00', 'image': 'images/wn6.webp', 'rating': 4},
+    ]
+    return render_template('index.html', products=products, mens_products=mens_products, womens_products=womens_products)
 
 @app.route('/shops')
 def shops():
-    mens_products = [
-        {'id': 1, 'name': 'Cotton Trending Shirt', 'price': '11.00', 'image': 'images/srt1.webp', 'rating': 4},
-        {'id': 2, 'name': 'Cotton Trending Shirt 2', 'price': '15.00', 'image': 'images/srt2.webp', 'rating': 4},
-        {'id': 3, 'name': 'Cotton Trending Shirt 3', 'price': '16.00', 'image': 'images/srt6.webp', 'rating': 4},
-        # Add more men products as needed
+    men_products = [
+        {'id': 7, 'name': 'Cotton Trending Shirt ', 'price': '11.00', 'image': 'images/srt1.webp', 'rating': 4},
+        {'id': 8, 'name': 'Cotton Trending Shirt 2', 'price': '15.00', 'image': 'images/srt2.webp', 'rating': 4},
+        {'id': 9, 'name': 'Cotton Trending Shirt 3', 'price': '16.00', 'image': 'images/srt6.webp', 'rating': 4},
     ]
-    womens_products = [
-        {'id': 5, 'name': 'Trending Girl Top', 'price': '19.00', 'image': 'images/wn4.webp', 'rating': 4},
-        {'id': 6, 'name': 'Trending Girl Top 2', 'price': '20.00', 'image': 'images/wn5.webp', 'rating': 4},
-        {'id': 7, 'name': 'Trending Girl Top 3', 'price': '22.00', 'image': 'images/wn6.webp', 'rating': 4},
-        # Add more women products as needed
+    women_products = [
+        {'id': 10, 'name': 'Trending Girl Top', 'price': '19.00', 'image': 'images/wn4.webp', 'rating': 4},
+        {'id': 11, 'name': 'Trending Girl Top 2', 'price': '20.00', 'image': 'images/wn5.webp', 'rating': 4},
+        {'id': 12, 'name': 'Trending Girl Top 3', 'price': '22.00', 'image': 'images/wn6.webp', 'rating': 4},
     ]
-    return render_template('shops.html', mens_products=mens_products, womens_products=womens_products)
+    return render_template('shops.html', men_products=men_products, women_products=women_products)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -224,81 +244,145 @@ def edit_profile():
         return redirect(url_for('profile'))
     return render_template('edit_profile.html', user=current_user)
 
-@app.route('/cart')
+@app.route('/cart', methods=['GET'])
 def cart():
-    cart = session.get('cart', [])
-    total = sum(item['quantity'] * item['price'] for item in cart)
-    return render_template('cart.html', cart_items=cart, total=total)
+    cart_items = Cart_item.query.options(joinedload(Cart_item.product)).all()
+    for item in cart_items:
+        if item.product:
+            print(f"Cart Item ID: {item.id}, Product ID: {item.product_id}, Product Name: {item.product.name}, Quantity: {item.quantity}")
+        else:
+            print(f"Cart Item ID: {item.id}, Product ID: {item.product_id} - Product not found!")
 
+    return render_template('cart.html', cart_items=cart_items)
 
-@app.route('/add_to_cart/<int:product_id>', methods=['POST'])
-def add_to_cart(product_id):
-    product = Product.query.get(product_id)  # Simplified query
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    product_id = request.form.get('product_id')
+    if not product_id:
+        return jsonify({'error': 'Product ID is required'}), 400
+    try:
+        product_id = int(product_id)
+    except ValueError:
+        return jsonify({'error': 'Invalid product ID'}), 400
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({'error': 'Product not found'}), 404
+    cart_item = Cart_item.query.filter_by(product_id=product_id).first()
     
-    if product:
-        cart = session.get('cart', [])
-        product_in_cart = False
-        
-        for item in cart:
-            if item['id'] == product_id:
-                item['quantity'] += 1
-                product_in_cart = True
-                break
-        
-        if not product_in_cart:
-            cart.append({
-                'id': product.id,
-                'name': product.name,
-                'price': product.price,
-                'quantity': 1,
-                'image_path': product.image
-            })
-        
-        session['cart'] = cart
-        flash('Product added to cart!', 'success')
+    if cart_item:
+        return redirect(url_for('cart'))
     else:
-        flash('Product not found.', 'error')
-    
-    print(f"Cart after update: {session.get('cart')}")  # Debug statement
+        cart_item = Cart_item(product_id=product_id, quantity=1, image=product.image)
+        database.session.add(cart_item)
+    try:
+        database.session.commit()
+    except Exception as e:
+        database.session.rollback()
+        print(f"Error committing to the database: {e}")
+        return jsonify({'error': 'An error occurred while adding to the cart'}), 500
+
     return redirect(url_for('cart'))
 
-
-
-
-@app.route('/remove_from_cart/<int:product_id>', methods=['POST'])
-def remove_from_cart(product_id):
-    cart = session.get('cart', [])
-    cart = [product for product in cart if product['id'] != product_id]
-    session['cart'] = cart
-    flash('Product removed from cart!', 'success')
+@app.route('/remove_from_cart', methods=['POST'])
+def remove_from_cart():
+    product_id = request.form.get('product_id')
+    cart_item = Cart_item.query.filter_by(product_id=product_id).first()
+    if cart_item:
+        database.session.delete(cart_item)
+        database.session.commit()
     return redirect(url_for('cart'))
 
-@app.route('/payment', methods=['POST'])
-def payment():
-    # Payment logic here
-    if request.method == 'POST':
-        flash('Payment successful! Thank you for your purchase.', 'success')
-        session.pop('cart', None)  # Clear the cart after successful payment
-    return redirect(url_for('cart'))
+@app.route('/wishlist')
+def wishlist():
+    wishlist = session.get('wishlist', [])
+    return render_template('wishlist.html', wishlist=wishlist)
+
+@app.route('/add_to_wishlist/<int:product_id>')
+def add_to_wishlist(product_id):
+    wishlist = session.get('wishlist', [])
+    if not any(item['id'] == product_id for item in wishlist):
+        product = next((p for p in product if p['id'] == product_id), None)
+        if product:
+            wishlist.append(product)
+            session['wishlist'] = wishlist
+            flash('Item added to wishlist!', 'success')
+        else:
+            flash('Product not found!', 'danger')
+    else:
+        flash('Item is already in the wishlist!', 'warning')
+
+    return redirect(url_for('wishlist'))
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     if request.method == 'POST':
-        flash('Payment successful! Thank you for your purchase.', 'success')
-        session.pop('cart', None)  # Clear the cart after successful payment
-        return redirect(url_for('index'))
+        # Get form data
+        fullname = request.form.get('fullname')
+        email = request.form.get('email')
+        address = request.form.get('address')
+        city = request.form.get('city')
+        state = request.form.get('state')
+        zip_code = request.form.get('zip')
+        cardname = request.form.get('cardname')
+        cardnumber = request.form.get('cardnumber')
+        expdate = request.form.get('expdate')
+        cvv = request.form.get('cvv')
+        
+        # Store relevant information in session
+        session['fullname'] = fullname
+        session['email'] = email
+        session['address'] = address
+        session['city'] = city
+        session['state'] = state
+        session['zip'] = zip_code
+        
+        # Optional: Store payment information in session (if needed)
+        # session['cardname'] = cardname
+        # session['cardnumber'] = cardnumber
+        # session['expdate'] = expdate
+        # session['cvv'] = cvv
+        # return render_template('confirmation.html')
+        # Perform your payment processing here
+        # Set a flag or check whether the payment was successful
+
+    # Handle GET request: Render the checkout page
     return render_template('checkout.html')
+
+@app.route('/confirmation')
+def confirmation():
+    fullname = session.get('fullname')
+    email = session.get('email')
+    address = session.get('address')
+    city = session.get('city')
+    state = session.get('state')
+    zip_code = session.get('zip')
+    cardname = session.get('cardname')
+    cardnumber = session.get('cardnumber')
+    expdate = session.get('expdate')
+    cvv = session.get('cvv')
+    return render_template('confirmation.html',
+                           fullname=fullname,
+                           email=email,
+                           address=address,
+                           city=city,
+                           state=state,
+                           zip_code=zip_code,
+                           cardname=cardname,
+                           cardnumber=cardnumber,
+                           expdate=expdate,
+                           cvv=cvv)
 
 @app.route('/product/<int:product_id>', methods=['GET', 'POST'])
 def product_detail(product_id):
-    product = database.session.query(Product).filter_by(id=product_id).first()
-    reviews = database.session.query(Review).filter_by(product_id=product_id).all()
+    product = Product.query.get_or_404(product_id)
+    reviews = Review.query.filter_by(product_id=product_id).all()
     return render_template('product_detail.html', product=product, reviews=reviews)
 
 @app.route('/submit_review/<int:product_id>', methods=['POST'])
+@login_required
 def submit_review(product_id):
     comment = request.form['comment']
-    rating = request.form['rating']
+    rating = int(request.form['rating'])
     user_id = current_user.id
     
     new_review = Review(
@@ -318,9 +402,8 @@ def blog():
 
 @app.route('/subscribe-newsletter', methods=['POST'])
 def subscribe_newsletter():
-    
+    flash('Subscribed to newsletter!', 'success')
     return redirect(url_for('blog'))  
-
 
 @app.route('/about')
 def about():
@@ -341,7 +424,6 @@ def contact():
 def orders():
     orders = Order.query.all()
     return render_template('orders.html', orders=orders)
-
 
 @app.route('/sponsor', methods=['GET', 'POST'])
 def sponsor():
@@ -368,8 +450,6 @@ def sponsor():
 @app.route('/sponsor_confirmation')
 def sponsor_confirmation():
     return "<h1>Thank you for your sponsorship!</h1><p>Your generosity makes a difference.</p>"
-@app.route('/show')
-def show():
-    return render_template('product_details')
+
 if __name__ == '__main__':
     app.run(debug=True)

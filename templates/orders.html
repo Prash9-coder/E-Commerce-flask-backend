@@ -21,10 +21,8 @@
         {% endfor %}
     </ul>
     {% else %}
-    <p class="empty-orders-msg text-center">You haven't ordered anything yet.</p>
-    <div class="text-center">
+    <p class="text-center">You haven't ordered anything yet.</p>
         <a href="{{ url_for('index') }}" class="btn btn-primary">Order Now</a>
-    </div>
     {% endif %}
 </div>
 {% endblock main %}

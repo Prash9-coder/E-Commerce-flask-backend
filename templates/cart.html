@@ -7,32 +7,31 @@ Cart
 {% block main %}
 <div class="cart-container">
     <h1 class="text-center">Your Shopping Cart</h1>
-
+    
     {% if cart_items %}
-    <ul class="cart-list">
+    <ul>
         {% for item in cart_items %}
-        <li class="cart-item d-flex align-items-center">
-            <img src="{{ item.image_path }}" alt="{{ item.name }}" class="cart-item-image">
-            <div class="cart-item-details">
-                <h3>{{ item.name }}</h3>
-                <p>Price: ${{ item.price }}</p>
-                <p>Quantity: {{ item.quantity }}</p>
-                <form action="{{ url_for('remove_from_cart', product_id=item.id) }}" method="POST" class="d-inline">
-                    <input type="hidden" name="product_id" value="{{ item.id }}">
+            <!-- Access the `Product` attributes through `item.product` -->
+            <li>
+                <img src="{{ url_for('static', filename=item.product.image) }}" alt="Product Image">
+                <p>{{ item.product.name }} - {{ item.quantity }} @ ${{ item.product.price }}-{{item.product.id}} each</p>
+                
+                <form action="{{ url_for('remove_from_cart') }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
-            </div>
-        </li>
+            </li>
         {% endfor %}
     </ul>
-    <div class="text-center mt-4">
-        <form action="{{ url_for('payment') }}" method="POST">
-            <button type="submit" class="btn btn-warning proceed-payment-btn">Proceed to Payment</button>
-        </form>
-    </div>
     {% else %}
     <p class="empty-cart-msg">Your cart is empty.</p>
     {% endif %}
+    
+    <div>
+        <form action="{{ url_for('checkout') }}" method="POST">
+            <button type="submit" class="btn btn-warning proceed-payment-btn">Proceed to Payment</button>
+        </form>
+    </div>
 </div>
 
 <hr>
@@ -45,10 +44,11 @@ Cart
         <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
         <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
         <div class="offer-buttons">
-            <form action="{{ url_for('add_to_cart', product_id=1) }}" method="POST">
+            <form action="{{ url_for('add_to_cart') }}" method="POST">
+                <input type="hidden" name="product_id" value="{{ some_product_id }}"> <!-- Replace some_product_id with a valid ID or context variable -->
                 <button type="submit" class="btn btn-success">Add to Cart</button>
             </form>
-            <form action="{{ url_for('payment') }}" method="POST">
+            <form action="{{ url_for('checkout') }}" method="POST">
                 <button id="buy" type="submit" class="btn btn-warning">Buy Now</button>
             </form>
         </div>

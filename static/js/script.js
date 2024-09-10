@@ -11,71 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function showCard(img) {
     let newImg = document.getElementById("cartImg");
     newImg.src = img.src;
-  document.querySelectorAll(".card img").forEach((img) => {
-    img.addEventListener("click", () => showCard(img));
-  });
-     
-  }
-
-  // Function to add items to the cart
-  function addToCart(productId) {
-    fetch("/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ productId: productId }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        alert("Product added to cart: " + data.message);
-      })
-      .catch((error) => {
-        console.error("Error adding product to cart:", error);
-        alert("Failed to add product to cart. Please try again.");
-      });
   }
   
-  document.querySelectorAll(".btn-success").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const productId = btn.getAttribute("data-product-id");
-      if (productId) {
-        addToCart(productId);
-      } else {
-        console.error("No product ID found on button");
-      }
-    });
-  });
-  
-
-  // Function to handle Buy Now button
-  function buyNow(productId) {
-    document.querySelectorAll(".btn-warning").forEach(function (btn) {
-      btn.addEventListener("click", function (event) {
-        event.preventDefault();
-        window.location.href = "payments.html";
-      });
-    });
-  }
-  
-
   // Adding event listeners to product images
   document.querySelectorAll(".card img").forEach((img) => {
     img.addEventListener("click", () => showCard(img));
   });
 
-  // Adding event listeners to "Add to Cart" and "Buy Now" buttons
-  document.querySelectorAll(".btn-success").forEach((btn) => {
-    btn.addEventListener("click", () =>
-      addToCart(btn.getAttribute("data-product-id"))
-    );
-  });
-
-  document.querySelectorAll(".btn-warning").forEach((btn) => {
-    btn.addEventListener("click", () =>
-      buyNow(btn.getAttribute("data-product-id"))
-    );
-  });
 
   // Profile photo upload event
   document
@@ -85,3 +27,23 @@ document.addEventListener("DOMContentLoaded", () => {
       this.form.submit(); // This will submit the form automatically after file selection
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  const links = document.querySelectorAll('nav ul li a');
+  const currentURL = window.location.pathname; // Get the current URL path
+
+  links.forEach(link => {
+    if (link.getAttribute('href') === currentURL) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+});
+
+    document.querySelector('form').addEventListener('submit', function() {
+        var productId = document.querySelector('input[name="product_id"]').value;
+        console.log('Product ID:', productId);
+    });
+
+

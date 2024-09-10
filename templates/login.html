@@ -7,25 +7,25 @@ Login
 {% block main %}
 <!-- Login Form -->
 <form method="post" action="{{ url_for('login') }}" class="login-form">
-    <h2 class="text-center">Login</h2>
+    <h2 class="login-title">Login</h2>
     
     <!-- Username Field -->
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" required>
+    <div class="form-group">
+        <label for="username" class="login-label">Username</label>
+        <input type="text" class="login-form-control" id="username" name="username" required>
     </div>
     
     <!-- Password Field -->
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
+    <div class="form-group">
+        <label for="password" class="login-label">Password</label>
+        <input type="password" class="login-form-control" id="password" name="password" required>
     </div>
     
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit" class="btn btn-primary login-btn">Login</button>
     
     <!-- Link to Registration Page -->
-    <p class="text-center">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+    <p>Don't have an account? <a href="{{ url_for('register') }}" class="register-link">Register</a></p>
 </form>
 
 <!-- Flash Messages -->
