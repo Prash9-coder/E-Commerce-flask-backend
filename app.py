@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 import os
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.secret_key = 'your_secret_key'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///register.database'
@@ -452,4 +452,4 @@ def sponsor_confirmation():
     return "<h1>Thank you for your sponsorship!</h1><p>Your generosity makes a difference.</p>"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
