@@ -452,4 +452,4 @@ def sponsor_confirmation():
     return "<h1>Thank you for your sponsorship!</h1><p>Your generosity makes a difference.</p>"
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host='0.0.0.0')
