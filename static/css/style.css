@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #f1f3f6; /* Flipkart-like light background */
+    background-color: #f1f3f6; 
     line-height: 1.6;
     min-height: 100vh;
     font-family: Arial, sans-serif;
@@ -20,9 +20,10 @@ body {
 /* Navbar Styles */
 nav {
     display: flex;
+    position: relative;
     justify-content: space-between;
     align-items: center;
-    background-color: #2874f0; /* Flipkart's signature blue */
+    background-color: #2874f0; 
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -56,7 +57,7 @@ nav ul li a {
 
 nav ul li a:hover,
 nav ul li a.nav-link.active {
-    color: #ffeb3b; /* Flipkart uses a bright yellow for hover/active states */
+    color: #ffeb3b; 
     border-bottom: 2px solid #ffeb3b;
 }
 
@@ -69,10 +70,73 @@ ul li i {
 ul li i:hover {
     color: #ffeb3b;
 }
+/* Style for the hamburger icon */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Hide the menu by default */
+.nav-menu {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Ensure the menu links are styled properly */
+.nav-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Mobile view styles */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        background-color: #2874f0;
+        width: 100%;
+        z-index: 1000;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-menu ul {
+        flex-direction: column;
+    }
+
+    .nav-menu li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
 
 /* Footer Styles */
 .footer {
-    background-color: #172337; /* Darker color similar to Flipkart's footer */
+    background-color: #172337; 
     color: #ffffff;
     padding: 20px 0;
     display: flex;
@@ -86,15 +150,13 @@ ul li i:hover {
 .footerText h2 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #ffeb3b; /* Consistent with the color scheme */
+    color: #ffeb3b; 
 }
 
 .footerText p {
     font-size: 14px;
     color: #b0bec5;
 }
-
-
 
 /* Header Section */
 .header {
@@ -110,6 +172,7 @@ ul li i:hover {
 }
 
 /* Main Section */
+/* General styles */
 .main {
     display: flex;
     align-items: center;
@@ -117,6 +180,10 @@ ul li i:hover {
     padding: 50px;
     background: #fff;
     margin-bottom: 20px;
+}
+
+.mainText {
+    max-width: 50%; /* Ensures text takes up half of the space */
 }
 
 .mainText h2 {
@@ -136,7 +203,8 @@ ul li i:hover {
 }
 
 .main img {
-    width: 400px;
+    max-width: 400px; 
+    width: 100%; 
     height: auto;
 }
 
@@ -147,20 +215,41 @@ button {
     border-radius: 4px;
 }
 
-/* Headings for sections */
-/* Centering the h1 */
-h1 {
-    font-size: 24px;
-    margin: 20px 0;
-    padding-left: 20px;
-    text-align: center; /* Center text within the h1 */
+/* Responsive styles */
+@media (max-width: 768px) {
+    .main {
+        flex-direction: inline; 
+        text-align: left;
+        padding: 20px; 
+    }
+
+    .mainText {
+        max-width: 60%; 
+        margin-bottom: 20px; 
+    }
+
+    .main img {
+        max-width: 60%; /* Ensure image fits within the container on small screens */
+    }
 }
 
-/* Centering the span inside h1 */
-h1 span {
-    color: #2874f0;
-}
+@media (max-width: 480px) {
+    .mainText h2 {
+        font-size: 1rem; /* Adjust font size for very small screens */
+    }
 
+    .mainText h1 {
+        font-size: 1.5rem;
+    }
+
+    .mainText p {
+        font-size: 0.775rem;
+    }
+
+    button {
+        padding: 8px 16px;
+    }
+}
 
 /* Product Card */
 /* Centering the Grid Container */
@@ -169,8 +258,8 @@ h1 span {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     padding: 20px;
-    max-width: 1200px; /* Set a max-width to maintain layout consistency */
-    margin: 0 auto; /* Center the grid container */
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
 
 /* Card Container */
@@ -185,8 +274,8 @@ h1 span {
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    max-width: 300px; /* Set a max-width to maintain consistency */
-    margin: 0 auto; /* Center the card */
+    max-width: 300px; 
+    margin: 0 auto; 
 }
 
 /* Card Hover Effect */
@@ -228,8 +317,8 @@ h1 span {
     font-size: 14px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-    width: 48%; /* Ensure buttons fit properly */
-    margin-right: 2%; /* Add a small margin between buttons */
+    width: 48%; 
+    margin-right: 2%; 
 }
 
 .btn-success {
@@ -282,7 +371,7 @@ h1 span {
 }
 
 .head h1 span {
-    color: #2874f0; /* Flipkart blue */
+    color: #2874f0; 
 }
 
 /* Blog Card Section */
@@ -301,14 +390,14 @@ h1 span {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: calc(50% - 20px); /* Adjust width for two columns with gap */
+    width: calc(50% - 20px); 
     max-width: 500px;
     transition: transform 0.3s ease;
-    margin-bottom: 20px; /* Space between rows */
+    margin-bottom: 20px; 
 }
 
 .blog:hover {
-    transform: scale(1.02); /* Slightly scale up the card on hover */
+    transform: scale(1.02); 
 }
 
 .blog img {
@@ -320,7 +409,7 @@ h1 span {
 }
 
 .blog:hover img {
-    transform: scale(1.1); /* Zoom in the image on hover */
+    transform: scale(1.1); 
 }
 
 /* Optional: Overlay effect */
@@ -330,29 +419,29 @@ h1 span {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+    background: rgba(0, 0, 0, 0.3); 
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 1; /* Ensure overlay is above other content but not above links */
+    z-index: 1; 
 }
 
 .blog:hover .overlay {
-    opacity: 1; /* Show overlay on hover */
+    opacity: 1; 
 }
 
-.overlay p {
+/* .overlay p {
     font-size: 18px;
     margin: 0;
-}
+} */
 
 /* Ensure the blogText is above other elements */
 .blogText {
     position: relative;
-    z-index: 2; /* Ensure text is above the overlay */
+    /* z-index: 2;  */
     padding: 15px;
 }
 
@@ -371,13 +460,13 @@ h1 span {
 .blogText a {
     display: inline-block;
     font-size: 14px;
-    color: #2874f0; /* Flipkart blue */
+    color: #2874f0; 
     text-decoration: none;
     border: 1px solid #2874f0;
     border-radius: 4px;
     padding: 8px 12px;
     transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 2; /* Ensure link is clickable above the overlay */
+    z-index: 2; 
 }
 
 .blogText a:hover {
@@ -388,13 +477,13 @@ h1 span {
 /* Responsive Styles */
 @media (max-width: 768px) {
     .blog {
-        width: calc(50% - 20px); /* Two columns on medium screens */
+        width: calc(50% - 20px); 
     }
 }
 
 @media (max-width: 480px) {
     .blog {
-        width: 100%; /* Single column on small screens */
+        width: 100%; 
     }
 }
 
@@ -494,41 +583,40 @@ h1 span {
 
 .text-center {
     text-align: center;
-    position: relative; /* Ensure the overlay is positioned correctly */
+    position: relative; 
 }
 
 /* Image Hover Effect */
 .text-center img {
     transition: transform 0.3s ease, filter 0.3s ease;
-    max-width: 100%; /* Ensure image scales properly */
+    max-width: 100%; 
     height: auto;
 }
 
 .text-center img:hover {
-    transform: scale(1.05); /* Slightly zoom in on hover */
-    filter: brightness(90%); /* Slightly darken the image on hover */
+    transform: scale(1.05); 
+    filter: brightness(90%);
 }
 
-/* Optional: Overlay effect on hover */
-.text-center::after {
+/* .text-center::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+    background: rgba(0, 0, 0, 0.3); 
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 1; /* Ensure overlay is above the image */
+    z-index: 1; 
 }
 
 .text-center:hover::after {
-    opacity: 1; /* Show overlay on hover */
-}
+    opacity: 1; 
+} */
 
 .text-center img {
-    z-index: 0; /* Ensure image is below the overlay */
+    z-index: 0; 
 }
 
 /* Image and Text Alignment */
@@ -597,7 +685,7 @@ ul li {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f4f4f4; /* Light background for the container */
+    background-color: #f4f4f4; 
 }
 
 /* Cart Header */
@@ -623,19 +711,19 @@ ul li {
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+    transition: box-shadow 0.3s ease; 
 }
 
 ul li img {
     max-width: 120px;
     height: auto;
     margin-right: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth zoom and shadow effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 ul li img:hover {
-    transform: scale(1.05); /* Slightly zoom in on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    transform: scale(1.05); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 ul li p {
@@ -656,7 +744,7 @@ ul li form {
     border: none;
     cursor: pointer;
     width: auto;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth color and scaling transitions */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
 }
 
 .btn-danger {
@@ -666,8 +754,8 @@ ul li form {
 }
 
 .btn-danger:hover {
-    background-color: #c0392b; /* Darker red on hover */
-    transform: scale(1.02); /* Slight zoom effect on hover */
+    background-color: #c0392b; 
+    transform: scale(1.02);
 }
 
 .btn-warning {
@@ -676,8 +764,8 @@ ul li form {
 }
 
 .btn-warning:hover {
-    background-color: #e67e22; /* Darker orange on hover */
-    transform: scale(1.02); /* Slight zoom effect on hover */
+    background-color: #e67e22; 
+    transform: scale(1.02); 
 }
 
 .btn-success {
@@ -686,8 +774,8 @@ ul li form {
 }
 
 .btn-success:hover {
-    background-color: #27ae60; /* Darker green on hover */
-    transform: scale(1.02); /* Slight zoom effect on hover */
+    background-color: #27ae60; 
+    transform: scale(1.02); 
 }
 
 .proceed-payment-btn {
@@ -699,8 +787,8 @@ ul li form {
 }
 
 .proceed-payment-btn:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-    transform: scale(1.02); /* Slight zoom effect on hover */
+    background-color: #2980b9; 
+    transform: scale(1.02); 
 }
 
 /* Empty Cart Message */
@@ -726,7 +814,7 @@ ul li form {
 }
 
 .offer-details h2 {
-    color: #e74c3c; /* Red color for special offer */
+    color: #e74c3c; 
     font-size: 20px;
 }
 
@@ -765,9 +853,9 @@ ul li form {
 /* Container */
 .payment-container {
     max-width: 900px;
-    margin: 40px auto; /* Centering the container and providing spacing from top */
+    margin: 40px auto; 
     padding: 30px;
-    background-color: #ffffff; /* White background for the container */
+    background-color: #ffffff; 
     border-radius: 8px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
@@ -801,15 +889,15 @@ ul li form {
     border: 1px solid #ddd;
     margin-bottom: 20px;
     font-size: 16px;
-    width: 100%; /* Ensure full-width input fields */
-    box-sizing: border-box; /* Include padding in element's total width and height */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for border and shadow */
+    width: 100%; 
+    box-sizing: border-box; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; 
 }
 
 .form-control:focus {
     border-color: #2874f0;
     box-shadow: 0 0 8px rgba(40, 116, 240, 0.2);
-    outline: none; /* Remove default focus outline */
+    outline: none; 
 }
 
 /* Button Styles */
@@ -819,9 +907,9 @@ ul li form {
     border-radius: 6px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and scaling */
-    display: inline-block; /* Ensure buttons align properly */
-    text-align: center; /* Center text within button */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+    display: inline-block; 
+    text-align: center; 
 }
 
 .btn-primary {
@@ -830,12 +918,12 @@ ul li form {
 }
 
 .btn-primary:hover {
-    background-color: #1a5bb7; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift effect on hover */
+    background-color: #1a5bb7; 
+    transform: translateY(-2px); 
 }
 
 .btn-block {
-    width: auto; /* Full-width buttons */
+    width: auto; 
 }
 
 /* Table Styles */
@@ -843,13 +931,13 @@ ul li form {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
-    background-color: #ffffff; /* White background for the table */
+    background-color: #ffffff; 
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .order-summary-table thead {
-    background-color: #f0f0f0; /* Light gray background for the header */
+    background-color: #f0f0f0; 
 }
 
 .order-summary-table th, .order-summary-table td {
@@ -865,14 +953,14 @@ ul li form {
 
 .order-summary-table tfoot {
     font-weight: 700;
-    background-color: #f0f0f0; /* Light gray background for the footer */
+    background-color: #f0f0f0; 
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
     .row {
         flex-direction: column;
-        gap: 20px; /* Space between columns when stacked */
+        gap: 20px; 
     }
     
     .col-md-6 {
@@ -1085,7 +1173,7 @@ ul li form {
 }
 
 textarea.form-control {
-    resize: vertical; /* Allows vertical resizing */
+    resize: vertical;
     height: 120px;
 }
 
@@ -1787,7 +1875,7 @@ body {
 /* Images Section */
 .sponsor-images {
     display: flex;
-    flex-wrap: wrap; /* Ensures images wrap on smaller screens */
+    flex-wrap: wrap; 
     gap: 20px;
     justify-content: center;
     margin-bottom: 30px;
@@ -1798,16 +1886,16 @@ body {
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    object-fit: cover; /* Ensures images cover the box without distortion */
-    flex: 1 1 calc(50% - 20px); /* Responsive width, adjust for spacing */
-    max-height: 400px; /* Prevents images from becoming too large */
+    object-fit: cover; 
+    flex: 1 1 calc(50% - 20px); 
+    max-height: 400px; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover Effect */
 .sponsor-image:hover {
-    transform: scale(1.05); /* Slightly enlarges the image */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Adds a larger shadow */
+    transform: scale(1.05); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Form Section */
@@ -1869,7 +1957,7 @@ body {
     }
 
     .sponsor-image {
-        max-height: 300px; /* Adjust height for smaller screens */
+        max-height: 300px; 
     }
 
     .sponsor-container {
